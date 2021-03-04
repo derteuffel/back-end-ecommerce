@@ -1,7 +1,7 @@
 package com.derteuffel.springbootecommerce.controller;
 
 import com.derteuffel.springbootecommerce.entities.Produit;
-import com.derteuffel.springbootecommerce.interfaces.PanierInterface;
+import com.derteuffel.springbootecommerce.helpers.ProduitHelper;
 import com.derteuffel.springbootecommerce.services.ProduitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,14 +30,26 @@ public class ProduitController {
     @Autowired
     private ProduitService produitService;
 
-    @Autowired
-    private PanierInterface panierInterface;
+
 
     @PostMapping("")
-    public ResponseEntity<Produit> save(@RequestBody Produit produit) {
+    public ResponseEntity<Produit> save(@RequestBody ProduitHelper produit) {
 
-        produit.setPictureUrl("http://localhost:8080/images/default.jpg");
-        return new ResponseEntity<>(produitService.save(produit), HttpStatus.CREATED) ;
+        System.out.println(produit.getColor());
+                Produit produit1 = new Produit();
+                produit1.setQuality(produit.getQuality());
+                produit1.setPrice(produit.getPrice());
+                produit1.setName(produit.getName());
+                produit1.setGenre(produit.getGenre());
+                produit1.setCategory(produit.getCategory());
+                produit1.setMarque(produit.getMarque());
+                produit1.setDescription(produit.getDescription());
+                produit1.setPictureUrl("http://localhost:8080/images/shopping-1.jpeg");
+                produit1.setColors(produit.getColor());
+                produitService.save(produit1);
+
+
+        return new ResponseEntity<>(produit1, HttpStatus.CREATED) ;
     }
 
 
@@ -115,6 +127,34 @@ public class ProduitController {
         return new ResponseEntity<>(productList, HttpStatus.OK);
     }
 
+    @GetMapping("/sort/{category}/{genre}")
+    public ResponseEntity<List<Produit>> findAllByCategoryAndGenre(@PathVariable String category, @PathVariable String genre) {
+        List<Produit> lists = produitService.findAllByCategoryAndGenre(category, genre);
+
+        return new ResponseEntity<>(lists, HttpStatus.OK);
+    }
+
+    @GetMapping("/marque/{marque}/{genre}")
+    public ResponseEntity<List<Produit>> findAllByMarqueAndGenre(@PathVariable String marque, @PathVariable String genre) {
+        List<Produit> lists = produitService.findAllByMarqueAndGenre(marque, genre);
+
+        return new ResponseEntity<>(lists, HttpStatus.OK);
+    }
+
+    @GetMapping("/colors/{color}/{genre}")
+    public ResponseEntity<List<Produit>> findAllByColorAndGenre(@PathVariable String color, @PathVariable String genre) {
+        List<Produit> lists = produitService.findAllByColors(color, genre);
+
+        return new ResponseEntity<>(lists, HttpStatus.OK);
+    }
+
+    @GetMapping("/mobile")
+    public ResponseEntity<List<Produit>> findAllMobile() {
+        List<Produit> lists = produitService.findAll();
+        System.out.println(lists);
+        return new ResponseEntity<>(lists, HttpStatus.OK);
+    }
+
     @GetMapping("/admin")
     public ResponseEntity<List<Produit>> findAllAdmin() {
         List<Produit> lists = produitService.findAll();
@@ -150,8 +190,8 @@ public class ProduitController {
         System.out.println(produitService.findAllByQuality(quality));
         List<Produit> lists = new ArrayList<>();
         List<Produit> produits = produitService.findAllByQuality(quality);
-        if (produits.size() > 6){
-            for (int i=0; i < 6; i++){
+        if (produits.size() > 8){
+            for (int i=0; i < 8; i++){
                 lists.add(produits.get(i));
             }
         }else {

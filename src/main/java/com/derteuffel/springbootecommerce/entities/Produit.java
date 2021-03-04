@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.ArrayList;
 
 
 @Entity
@@ -21,6 +22,9 @@ public class Produit {
     private String genre;
     private String pictureUrl;
     private Double price;
+    private String marque;
+    private ArrayList<String> colors;
+    private String description;
 
     private String quality;
 
@@ -28,13 +32,16 @@ public class Produit {
     public Produit() {
     }
 
-    public Produit(String name, String category, String genre, String pictureUrl, Double price, String quality) {
+    public Produit(String name, String category, String genre, String pictureUrl,
+                   Double price, String quality, String marque, String description) {
         this.name = name;
         this.category = category;
         this.genre = genre;
         this.pictureUrl = pictureUrl;
         this.price = price;
         this.quality = quality;
+        this.marque = marque;
+        this.description = description;
     }
 
     public Long getId() {
@@ -91,5 +98,29 @@ public class Produit {
 
     public void setQuality(String quality) {
         this.quality = quality;
+    }
+
+    public String getMarque() {
+        return marque;
+    }
+
+    public void setMarque(String marque) {
+        this.marque = marque;
+    }
+
+    public ArrayList<String> getColors() {
+        return colors;
+    }
+
+    public void setColors(ArrayList<String> colors) {
+        this.colors = colors;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

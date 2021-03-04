@@ -12,5 +12,8 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
     List<Produit> findAllByCategoryOrderByIdDesc(String category);
     List<Produit> findAllByGenreOrderByIdDesc(String genre);
     List<Produit> findAllByQualityOrderByIdDesc(String quality);
+    List<Produit> findAllByCategoryAndGenreOrderByIdDesc(String category, String genre);
+    List<Produit> findAllByMarqueAndGenreOrderByIdDesc(String marque, String genre);
+
 
 }

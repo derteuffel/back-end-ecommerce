@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -64,5 +65,26 @@ public class ProduitService implements ProduitInterface {
     @Override
     public List<Produit> findAllByQuality(String quality) {
         return produitRepository.findAllByQualityOrderByIdDesc(quality);
+    }
+
+    @Override
+    public List<Produit> findAllByCategoryAndGenre(String category, String genre) {
+        return produitRepository.findAllByCategoryAndGenreOrderByIdDesc(category, genre);
+    }
+
+    @Override
+    public List<Produit> findAllByMarqueAndGenre(String marque, String genre) {
+        return produitRepository.findAllByMarqueAndGenreOrderByIdDesc(marque,genre);
+    }
+
+    @Override
+    public List<Produit> findAllByColors(String color, String genre) {
+        List<Produit> lists = new ArrayList<>();
+        for (Produit produit : produitRepository.findAllByGenreOrderByIdDesc(genre)){
+            if (produit.getColors() != null && produit.getColors().contains(color)){
+                lists.add(produit);
+            }
+        }
+        return lists;
     }
 }

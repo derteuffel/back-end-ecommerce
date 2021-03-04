@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface CommandeRepository extends JpaRepository<Commande, Long> {
 
-    List<Commande> findAllByPanier_Id(Long id);
+    //List<Commande> findAllByPanier_Id(Long id);
 }

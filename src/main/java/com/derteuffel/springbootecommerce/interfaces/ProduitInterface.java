@@ -14,5 +14,8 @@ public interface ProduitInterface {
     List<Produit> findAllByCategory(String category);
     List<Produit> findAllByGenre(String genre);
     List<Produit> findAllByQuality(String quality);
+    List<Produit> findAllByCategoryAndGenre(String category, String genre);
+    List<Produit> findAllByMarqueAndGenre(String marque, String genre);
+    List<Produit> findAllByColors(String color, String genre);
 
 }

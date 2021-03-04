@@ -1,10 +1,15 @@
 package com.derteuffel.springbootecommerce.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -12,40 +17,40 @@ import java.util.Date;
 public class Commande {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int quantity;
-    private String color;
-    private String size;
+
     private String numero;
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd/MM/yyyy hh:mm")
+    @JsonFormat(pattern = "dd/MM/yyyy hh:mm")
     private Date orderDate = new Date();
 
     private String status;
-    private Double amount;
 
-    @ManyToOne
-    private Produit produit;
-    @ManyToOne
-    private Panier panier;
+    @JsonManagedReference
+    @OneToMany(mappedBy = "panier.commande")
+    @Valid
+    private List<ProduitCommande> produitCommandes = new ArrayList<>();
+
+    @Transient
+    public Double getTotalOrderPrice() {
+        double sum = 0D;
+        List<ProduitCommande> produitCommandes = getProduitCommandes();
+        for (ProduitCommande op : produitCommandes) {
+            sum += op.getTotalPrice();
+        }
+        return sum;
+    }
+
+    @Transient
+    public int getNumberOfProducts() {
+        return this.produitCommandes.size();
+    }
 
     public Commande() {
     }
 
-    public Commande(int quantity, String color, String size) {
-        this.quantity = quantity;
-        this.color = color;
-        this.size = size;
-    }
 
-    public Commande(int quantity, String color, String size, Panier panier, Produit produit) {
-        this.quantity = quantity;
-        this.color = color;
-        this.size = size;
-        this.produit = produit;
-        this.panier = panier;
-    }
+
 
     public Long getId() {
         return id;
@@ -55,45 +60,14 @@ public class Commande {
         this.id = id;
     }
 
-    public int getQuantity() {
-        return quantity;
+
+
+    public List<ProduitCommande> getProduitCommandes() {
+        return produitCommandes;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public Produit getProduit() {
-        return produit;
-    }
-
-    public void setProduit(Produit produit) {
-        this.produit = produit;
-    }
-
-
-    public Panier getPanier() {
-        return panier;
-    }
-
-    public void setPanier(Panier panier) {
-        this.panier = panier;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
+    public void setProduitCommandes(List<ProduitCommande> produitCommandes) {
+        this.produitCommandes = produitCommandes;
     }
 
     public String getNumero() {
@@ -120,11 +94,5 @@ public class Commande {
         this.status = status;
     }
 
-    public Double getAmount() {
-        return amount;
-    }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
 }

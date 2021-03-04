@@ -1,63 +1,88 @@
 package com.derteuffel.springbootecommerce.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
-@Entity
-@Data
-@Table(name = "panier")
-public class Panier {
+@Embeddable
+public class Panier implements Serializable{
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @JsonBackReference
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "commande_id")
+    private Commande commande;
 
-    private String numero;
-    private Double montantTotal;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "produit_id")
+    private Produit produit;
 
-    @ManyToOne
-    private User user;
-
-    public Panier() {
+    public Commande getCommande() {
+        return commande;
     }
 
-    public Panier(String numero, Double montantTotal, User user) {
-        this.numero = numero;
-        this.montantTotal = montantTotal;
-        this.user = user;
+    public void setCommande(Commande commande) {
+        this.commande = commande;
     }
 
-    public Long getId() {
-        return id;
+    public Produit getProduit() {
+        return produit;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setProduit(Produit produit) {
+        this.produit = produit;
     }
 
-    public String getNumero() {
-        return numero;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Panier other = (Panier) obj;
+        if (commande == null) {
+            if (other.commande != null) {
+                return false;
+            }
+        } else if (!commande.equals(other.commande)) {
+            return false;
+        }
+
+        if (produit == null) {
+            if (other.produit != null) {
+                return false;
+            }
+        } else if (!produit.equals(other.produit)) {
+            return false;
+        }
+
+        return true;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
+    @Override
+    public int hashCode() {
 
-    public Double getMontantTotal() {
-        return montantTotal;
-    }
+        final int prime = 31;
+        int result = 1;
 
-    public void setMontantTotal(Double montantTotal) {
-        this.montantTotal = montantTotal;
-    }
+        result = prime * result + ((commande.getId() == null)
+                ? 0
+                : commande
+                .getId()
+                .hashCode());
+        result = prime * result + ((produit.getId() == null)
+                ? 0
+                : produit
+                .getId()
+                .hashCode());
 
-    public User getUser() {
-        return user;
+        return result;
     }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
 }
