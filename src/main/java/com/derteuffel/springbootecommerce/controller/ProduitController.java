@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/produits")
-@CrossOrigin
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ProduitController {
 
     @Value("${file.upload-dir}")
