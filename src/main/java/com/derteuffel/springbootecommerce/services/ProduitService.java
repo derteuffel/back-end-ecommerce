@@ -37,6 +37,9 @@ public class ProduitService implements ProduitInterface {
             existedProduit.setGenre(produit.getGenre());
             existedProduit.setName(produit.getName());
             existedProduit.setPrice(produit.getPrice());
+            existedProduit.setDescription(produit.getDescription());
+            existedProduit.setMarque(produit.getMarque());
+            existedProduit.setColors(produit.getColors());
         }
         return produitRepository.save(existedProduit);
     }

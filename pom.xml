@@ -69,7 +69,6 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<<<<<<< HEAD
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
@@ -80,7 +79,6 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>-->
-=======
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -92,7 +90,6 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>-->
->>>>>>> 71c1111f2ff16b72f349eedb2ca5a3854d090b83
 	</dependencies>
 
 	<build>

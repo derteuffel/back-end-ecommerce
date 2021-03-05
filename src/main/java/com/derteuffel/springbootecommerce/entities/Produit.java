@@ -24,6 +24,7 @@ public class Produit {
     private Double price;
     private String marque;
     private ArrayList<String> colors;
+    private ArrayList<String> pictures;
     private String description;
 
     private String quality;
@@ -122,5 +123,13 @@ public class Produit {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public ArrayList<String> getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(ArrayList<String> pictures) {
+        this.pictures = pictures;
     }
 }

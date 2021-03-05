@@ -11,16 +11,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/produits")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 public class ProduitController {
 
     @Value("${file.upload-dir}")
@@ -61,6 +63,50 @@ public class ProduitController {
     }
 
 
+    @PostMapping("/uploads/{id}")
+    public ResponseEntity<List<Produit>> uploadFiles(@RequestParam("file") MultipartFile file, @PathVariable int id){
+
+
+
+        Produit produit =  produitService.getOne(Long.parseLong(id+""));
+        if (produit != null) {
+
+            //post.setPicture("http://localhost:8080/uploads-file"+file.getOriginalFilename());
+
+
+
+            try {
+
+
+
+                        if (!(file.isEmpty())) {
+                            // Get the file and save it somewhere
+                            if (produit.getPictures() != null) {
+                                produit.getPictures().add("http://localhost:8080/downloadFile/" + file.getOriginalFilename());
+                            }else {
+                                produit.setPictures(new ArrayList<>(Arrays.asList("http://localhost:8080/downloadFile/" + file.getOriginalFilename())));
+                            }
+                            Path path = Paths.get(location + "/" + file.getOriginalFilename());
+                            byte[] bytes = file.getBytes();
+
+                            Files.write(path, bytes);
+                        }
+
+                } catch(IOException e){
+                    e.printStackTrace();
+                }
+                produitService.save(produit);
+            for(String string : produit.getPictures()){
+                System.out.println("je suis "+string);
+            }
+
+        }else {
+            System.out.println("le produit n'existe pas");
+        }
+
+        return new ResponseEntity<>(produitService.findAll(),HttpStatus.OK);
+    }
+
     @PostMapping("/upload/{id}")
     public ResponseEntity<List<Produit>> uploadFile(@RequestParam("file") MultipartFile file, @PathVariable int id){
 
@@ -81,12 +127,12 @@ public class ProduitController {
 
                 if (!(file.isEmpty())) {
 
-                            // Get the file and save it somewhere
-                            produit.setPictureUrl("http://localhost:8080/downloadFile/"+ file.getOriginalFilename());
-                            Path path = Paths.get(location +"/"+ file.getOriginalFilename());
-                            byte[] bytes = file.getBytes();
+                    // Get the file and save it somewhere
+                    produit.setPictureUrl("http://localhost:8080/downloadFile/"+ file.getOriginalFilename());
+                    Path path = Paths.get(location +"/"+ file.getOriginalFilename());
+                    byte[] bytes = file.getBytes();
 
-                            Files.write(path, bytes);
+                    Files.write(path, bytes);
 
                 }
             } catch (IOException e) {
