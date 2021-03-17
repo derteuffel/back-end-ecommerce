@@ -1,7 +1,9 @@
 package com.derteuffel.springbootecommerce.controller;
 
+import com.derteuffel.springbootecommerce.entities.Boutique;
 import com.derteuffel.springbootecommerce.entities.Produit;
 import com.derteuffel.springbootecommerce.helpers.ProduitHelper;
+import com.derteuffel.springbootecommerce.interfaces.BoutiqueInterface;
 import com.derteuffel.springbootecommerce.services.ProduitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/produits")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class ProduitController {
 
     @Value("${file.upload-dir}")
@@ -32,11 +34,15 @@ public class ProduitController {
     @Autowired
     private ProduitService produitService;
 
+    @Autowired
+    private BoutiqueInterface boutiqueInterface;
 
 
-    @PostMapping("")
-    public ResponseEntity<Produit> save(@RequestBody ProduitHelper produit) {
 
+    @PostMapping("/{id}")
+    public ResponseEntity<Produit> save(@RequestBody ProduitHelper produit, @PathVariable Long id) {
+
+        Boutique boutique = boutiqueInterface.getBoutique(id);
         System.out.println(produit.getColor());
                 Produit produit1 = new Produit();
                 produit1.setQuality(produit.getQuality());
@@ -48,6 +54,7 @@ public class ProduitController {
                 produit1.setDescription(produit.getDescription());
                 produit1.setPictureUrl("http://localhost:8080/images/shopping-1.jpeg");
                 produit1.setColors(produit.getColor());
+                produit1.setBoutique(boutique);
                 produitService.save(produit1);
 
 

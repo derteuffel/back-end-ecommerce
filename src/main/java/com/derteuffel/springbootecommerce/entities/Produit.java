@@ -2,10 +2,7 @@ package com.derteuffel.springbootecommerce.entities;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
 
 
@@ -28,6 +25,9 @@ public class Produit {
     private String description;
 
     private String quality;
+
+    @ManyToOne
+    private Boutique boutique;
 
 
     public Produit() {
@@ -131,5 +131,13 @@ public class Produit {
 
     public void setPictures(ArrayList<String> pictures) {
         this.pictures = pictures;
+    }
+
+    public Boutique getBoutique() {
+        return boutique;
+    }
+
+    public void setBoutique(Boutique boutique) {
+        this.boutique = boutique;
     }
 }

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/commandes")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class CommandeController {
 
     @Autowired
@@ -47,6 +47,7 @@ public class CommandeController {
     public ResponseEntity<Commande> create(@RequestBody OrderForm form) {
 
         List<ProduitCommandeDto> formDtos = form.getProductOrders();
+        System.out.println("Je contien :"+formDtos.size()+" elements");
         for (ProduitCommandeDto pc : formDtos) {
             System.out.println(pc.getProduit());
             System.out.println(pc.getQuantity());
